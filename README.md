@@ -28,4 +28,5 @@ As instâncias do mTTP são matrizes quadrada com as distâncias entre todos os 
 |[circ12](instancias/circ12.txt)      | 432    |
 
 __Nota :__ As instâncias foram espelhadas da biblioteca [Challenge Traveling Tournament Instances](https://mat.gsia.cmu.edu/TOURN/) e para mais informações acesse o [Enunciado Completo](utils/enunciado.pdf).
+
 __Nota2 :__ Informações sobre o algoritmo Simulated Annealing podem ser vistas na [Wikipedia](https://en.wikipedia.org/wiki/Simulated_annealing) ou nesses [Slides sobre o conteúdo](utils/SA_slides.pdf) feito pelo Prof Bruno
