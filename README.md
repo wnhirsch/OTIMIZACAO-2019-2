@@ -1,4 +1,4 @@
-## Mirrored Traveling Tournament Problem (mTTP)
+Mirrored Traveling Tournament Problem (mTTP)
 =======
 
 #### Definição: 
