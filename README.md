@@ -27,4 +27,4 @@ As instâncias do mTTP são matrizes quadrada com as distâncias entre todos os 
 |[circ10](instancias/circ10.txt)      | 272    |
 |[circ12](instancias/circ12.txt)      | 432    |
 
-__Nota :__ As instâncias foram espelhadas da biblioteca [Challenge Traveling Tournament Instances](https://mat.gsia.cmu.edu/TOURN/).
+__Nota :__ As instâncias foram espelhadas da biblioteca [Challenge Traveling Tournament Instances](https://mat.gsia.cmu.edu/TOURN/) e para mais informações acesse o [Enunciado Completo](https://moodle.inf.ufrgs.br/pluginfile.php/142630/mod_resource/content/2/definicao-trabalho-opt-2019-2.pdf).
