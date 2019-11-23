@@ -33,4 +33,4 @@ __Nota2 :__ Informações sobre o algoritmo Simulated Annealing podem ser vistas
 
 __Nota3 :__ Link para o repositório no [repl.it](https://repl.it/join/eqzuxvbd-wnhirsch) com o código em Python.
 
-__Nota4 :__ Link para implementação do [Simulated Anealing](https://arxiv.org/pdf/1311.1884.pdf) baseado no mTTP
+__Nota4 :__ Link para implementação do [Simulated Anealing](https://arxiv.org/pdf/1311.1884.pdf) baseado no mTTP.
