@@ -32,3 +32,5 @@ __Nota :__ As instâncias foram espelhadas da biblioteca [Challenge Traveling To
 __Nota2 :__ Informações sobre o algoritmo Simulated Annealing podem ser vistas na [Wikipedia](https://en.wikipedia.org/wiki/Simulated_annealing) ou nesses [Slides sobre o conteúdo](utils/SA_slides.pdf) feito pelo Prof Bruno
 
 __Nota3 :__ Link para o repositório no [repl.it](https://repl.it/join/eqzuxvbd-wnhirsch) com o código em Python.
+
+__Nota4 :__ Link para implementação do [Simulated Anealing](https://arxiv.org/pdf/1311.1884.pdf) baseado no mTTP.
