@@ -17,9 +17,6 @@ for x in range(numEquipes):
 	print("")
 print("]")
 
-# Get GLPK possible solutions
-PS = []
-
 # The Simulated Annealing algorithm will receive all possible solutions
 # computed by GLPK and find the best one for this instance of mTTP problem
 #
@@ -54,16 +51,21 @@ def simulatedAnnealing(iterations, tempInitial, tempFinal, alpha):
 		counter += 1
 	return bestPS
 
+# This function generates a random valid solution for the mTTP problem
+#
+# @return S - a random possible solution for this instance
+def generateRandomSolution():
+	S = None
+	return S
+
 # This function receives a possible solution for the mTTP problem and
 # return a random neighbour based on it
 #
 # @param S - a possible solution for this instance
-# @param SS - the set of possible solutions
 # @return neighbour - a random neighbour of this solution
-def chooseNeighbour(S, SS):
+def chooseNeighbour(S):
 	neighbour = None
 	return neighbour
-
 
 # This function receives a possible solution for the mTTP problem and
 # return your respective Z
