@@ -1,6 +1,7 @@
 import math
 import numpy
 import random
+import time
 
 # The Simulated Annealing algorithm will receive all possible solutions
 # computed by GLPK and find the best one for this instance of mTTP problem
@@ -8,9 +9,11 @@ import random
 # @param iterations - number of iterations until you consider the current solution as the best
 # @param tempInitial - initial temperature (algorithm variable) (greater then @tempFinal) 
 # @param tempFinal - final/maximum temperature (algorithm variable)
-# @param alpha - temperature variability value (between 0.0 and 1.0) 
+# @param alpha - temperature variability value (between 0.0 and 1.0)
 # @return bestPS - best solution found
 def simulatedAnnealing(iterations, tempInitial, tempFinal, alpha):
+	# Compute time
+	startTime = time.time()
 	# start with a random solution and assume that it is the best
 	actualPS = INITIAL
 	bestPS = actualPS
@@ -20,7 +23,7 @@ def simulatedAnnealing(iterations, tempInitial, tempFinal, alpha):
 	# iterations counter
 	counter = 0
 	while counter < iterations:
-		print("Iteration: " + str(counter) + "; Optimal: " + str(bestDist))
+		print("Iteration: " + str(counter+1) + "; Optimal: " + str(bestDist) + "; Time: " + str(time.time() - startTime))
 		actualTemp = tempInitial
 		finalTemp = tempFinal
 		actualDist = bestDist
@@ -264,7 +267,7 @@ def verifyConstraint7(S):
 
 
 
-instance = "N14"
+instance = "circ10"
 
 # Get initial parameters
 matches = []
@@ -304,7 +307,7 @@ else:
 	print("#### INVALID INITIAL INSTANCE : BE CAREFULL ####")
 
 # Perform Simulated Annealing
-bestSolution = simulatedAnnealing(200, 500, 20, 0.9)
+bestSolution = simulatedAnnealing(10000, 500, 20, 0.9)
 Z = computeSolution(bestSolution)
 print("Solution = \n" + str(bestSolution))
 print("Z = " + str(Z))
