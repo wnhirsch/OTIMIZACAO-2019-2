@@ -10,34 +10,48 @@ import time
 # @param tempInitial - initial temperature (algorithm variable) (greater then @tempFinal) 
 # @param tempFinal - final/maximum temperature (algorithm variable)
 # @param alpha - temperature variability value (between 0.0 and 1.0)
+# @param randomApproach - is True if you want to compute everything randomly
 # @return bestPS - best solution found
-def simulatedAnnealing(iterations, tempInitial, tempFinal, alpha):
-	# Compute time
+def simulatedAnnealing(iterations, tempInitial, tempFinal, alpha, randomApproach):
+	# Compute time and status
 	startTime = time.time()
+	bestTime = 0.0
+	bestIteration = 0
 	# start with a random solution and assume that it is the best
 	actualPS = INITIAL
 	bestPS = actualPS
+	bestIsValid = verifySolution(bestPS)
 	# compute this solution and assume that it is the best
 	actualDist = computeSolution(actualPS)
 	bestDist = actualDist
 	# iterations counter
 	counter = 0
 	while counter < iterations:
-		print("Iteration: " + str(counter+1) + "; Optimal: " + str(bestDist) + "; Time: " + str(time.time() - startTime))
+		# Print status
+		print("\nActual Iteration: " + str(counter+1) + "; Optimal: " + str(bestDist) + "; Time: " + str(time.time() - startTime))
+		print("\t|BEST| Iteration: " + str(bestIteration+1) + "; Time: " + str(bestTime) + "; Valid: " + str(bestIsValid))
+		# Init iteration
 		actualTemp = tempInitial
 		finalTemp = tempFinal
 		actualDist = bestDist
 		actualPS = bestPS
 		while actualTemp > finalTemp:
-			_actualPS = generateNeighbour(actualPS)
+			if(randomApproach):
+				_actualPS = generateRandomNeighbour(actualPS)
+			else:
+				_actualPS = generateNeighbour(actualPS)
 			_actualDist = computeSolution(_actualPS)
 			delta = _actualDist - actualDist
 			if(delta < 0 or math.exp(-delta / actualTemp) > random.random()):
 				actualDist = _actualDist
 				actualPS = _actualPS
-				if(_actualDist < bestDist and verifySolution(actualPS)):
+				actualIsValid = verifySolution(actualPS)
+				if(_actualDist < bestDist and not (bestIsValid and not actualIsValid)):
 					bestDist = actualDist
 					bestPS = actualPS
+					bestIsValid = actualIsValid
+					bestTime = time.time() - startTime
+					bestIteration = counter+1
 			actualTemp *= alpha
 		counter += 1
 	return bestPS
@@ -49,8 +63,10 @@ def generateRandomSolution():
 	S = numpy.random.randint(low=0, high=2, size=(teams, teams, rounds))
 	return S
 
-# This function receives a possible solution for the mTTP problem and
-# return a random neighbour based on it
+# This sequence of functions receives a possible solution for the mTTP problem and
+# return a random neighbour based on it with some changes
+# The difference is that the first is more complex but make smart changes
+# The second only chose a random index and negate it
 #
 # @param S - a possible solution for this instance
 # @return neighbour - a random neighbour of this solution
@@ -62,6 +78,13 @@ def generateNeighbour(S):
 		local = changeLocal(local, games)
 	neighbour = unsimplifySolution(games, local)
 	return neighbour
+
+def generateRandomNeighbour(S):
+	e1 = random.randrange(teams)
+	e2 = random.randrange(teams)
+	k = random.randrange(rounds)
+	S[e1][e2][k] = 1 - S[e1][e2][k]
+	return S
 
 # This function receives a list of locals and randomize it
 #
@@ -266,8 +289,7 @@ def verifyConstraint7(S):
 ################################################################################
 
 
-
-instance = "circ10"
+instance = "N12"
 
 # Get initial parameters
 matches = []
@@ -283,6 +305,7 @@ print("rounds = " + str(rounds))
 print("matches = \n" + str(matches))
 
 # Get INITIAL value
+randomApproach = True
 try:
 	gamesInit = []
 	localInit = []
@@ -297,6 +320,7 @@ try:
 	print("#### INIT SOLUTION FROM FILE ####")
 	print("gamesInit = \n" + str(gamesInit))
 	print("localInit = \n" + str(localInit))
+	randomApproach = False
 except:
 	print("#### RANDOMLY INIT SOLUTION ####")
 	INITIAL = generateRandomSolution()
@@ -307,10 +331,15 @@ else:
 	print("#### INVALID INITIAL INSTANCE : BE CAREFULL ####")
 
 # Perform Simulated Annealing
-bestSolution = simulatedAnnealing(10000, 500, 20, 0.9)
+bestSolution = simulatedAnnealing(10000, 1000, 20, 0.8, randomApproach)
 Z = computeSolution(bestSolution)
 print("Solution = \n" + str(bestSolution))
 print("Z = " + str(Z))
+
+if(verifySolution(bestSolution)):
+	print("#### VALID FINAL SOLUTION ####")
+else:
+	print("#### INVALID FINAL SOLUTION : BE CAREFULL ####")
 
 gamesEnd, localEnd = simplifySolution(bestSolution)
 print("games = \n" + str(gamesEnd))
