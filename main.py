@@ -11,11 +11,8 @@ import random
 # @param alpha - temperature variability value (between 0.0 and 1.0) 
 # @return bestPS - best solution found
 def simulatedAnnealing(iterations, tempInitial, tempFinal, alpha):
-	# initialize already computed solution list
-	PS = []
 	# start with a random solution and assume that it is the best
 	actualPS = INITIAL
-		# PS.append(actualPS)
 	bestPS = actualPS
 	# compute this solution and assume that it is the best
 	actualDist = computeSolution(actualPS)
@@ -29,9 +26,8 @@ def simulatedAnnealing(iterations, tempInitial, tempFinal, alpha):
 		actualDist = bestDist
 		actualPS = bestPS
 		while actualTemp > finalTemp:
-			_actualPS = generateNeighbour(actualPS, PS)
+			_actualPS = generateNeighbour(actualPS)
 			_actualDist = computeSolution(_actualPS)
-				# PS.append(_actualPS)
 			delta = _actualDist - actualDist
 			if(delta < 0 or math.exp(-delta / actualTemp) > random.random()):
 				actualDist = _actualDist
@@ -47,35 +43,15 @@ def simulatedAnnealing(iterations, tempInitial, tempFinal, alpha):
 #
 # @return S - a random possible solution for this instance
 def generateRandomSolution():
-	S = None
+	S = numpy.random.randint(low=0, high=2, size=(teams, teams, rounds))
 	return S
-
-def generateRandomGames():
-	notFound = True
-	while notFound:
-		firstRow = random.sample(range(teams), teams)
-		permutes = random.sample(range(teams), teams)
-		games = list(firstRow[i:] + firstRow[:i] for i in permutes)
-
-		for k in range(teams):
-			value = 0
-			for e in range(teams):
-				if(games[e][k] == value):
-					value += 1
-				else:
-					break
-			if(value == teams):
-				notFound = False
-				return numpy.delete(games, k, 1)
-
 
 # This function receives a possible solution for the mTTP problem and
 # return a random neighbour based on it
 #
 # @param S - a possible solution for this instance
-# @param PS - a list of already computed solutions
 # @return neighbour - a random neighbour of this solution
-def generateNeighbour(S, PS):
+def generateNeighbour(S):
 	games, local = simplifySolution(S)
 	if(bool(random.getrandbits(1))):
 		games, local = changeGames(games, local)
@@ -288,7 +264,7 @@ def verifyConstraint7(S):
 
 
 
-instance = "circ8"
+instance = "N14"
 
 # Get initial parameters
 matches = []
@@ -298,29 +274,37 @@ matches = numpy.array(matches)
 teams = len(matches)
 rounds = 2*teams - 2
 
-gamesInit = []
-localInit = []
-with open("entradas/len" + str(teams) + ".txt", 'r') as f:
-    gamesInit = [[int(num.split(',')[0]) for num in line.split()] for line in f]
-with open("entradas/len" + str(teams) + ".txt", 'r') as f:
-	localInit = [[int(num.split(',')[1]) for num in line.split()] for line in f]
-gamesInit = numpy.array(gamesInit)
-localInit = numpy.array(localInit)
-
 # Print them
 print("teams = " + str(teams))
 print("rounds = " + str(rounds))
 print("matches = \n" + str(matches))
-print("gamesInit = \n" + str(gamesInit))
-print("localInit = \n" + str(localInit))
 
-INITIAL = unsimplifySolution(gamesInit, localInit)
+# Get INITIAL value
+try:
+	gamesInit = []
+	localInit = []
+	with open("entradas/len" + str(teams) + ".txt", 'r') as f:
+		gamesInit = [[int(num.split(',')[0]) for num in line.split()] for line in f]
+	with open("entradas/len" + str(teams) + ".txt", 'r') as f:
+		localInit = [[int(num.split(',')[1]) for num in line.split()] for line in f]
+
+	gamesInit = numpy.array(gamesInit)
+	localInit = numpy.array(localInit)
+	INITIAL = unsimplifySolution(gamesInit, localInit)
+	print("#### INIT SOLUTION FROM FILE ####")
+	print("gamesInit = \n" + str(gamesInit))
+	print("localInit = \n" + str(localInit))
+except:
+	print("#### RANDOMLY INIT SOLUTION ####")
+	INITIAL = generateRandomSolution()
+
 if(verifySolution(INITIAL)):
-	print("#### VALID INSTANCE ####")
+	print("#### VALID INITIAL INSTANCE ####")
 else:
-	print("#### INVALID INSTANCE : BE CAREFULL ####")
+	print("#### INVALID INITIAL INSTANCE : BE CAREFULL ####")
 
-bestSolution = simulatedAnnealing(200, 200, 20, 0.5)
+# Perform Simulated Annealing
+bestSolution = simulatedAnnealing(200, 500, 20, 0.9)
 Z = computeSolution(bestSolution)
 print("Solution = \n" + str(bestSolution))
 print("Z = " + str(Z))
